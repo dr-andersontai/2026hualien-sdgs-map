@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>洄瀾永續探索地圖｜花蓮SDGs大富翁</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ══ DESIGN SYSTEM：稻米白底 × 墨綠 × 金（淺色系全版） ══ */
+:root {
+  --ink:       #f7f2e8;
+  --ink-deep:  #ede8da;
+  --forest:    #2d5a3d;
+  --forest-mid:#3d7050;
+  --forest-lt: #2a5035;
+  --gold:      #8a6200;
+  --gold-mid:  #a67800;
+  --gold-lt:   #b88a00;
+  --rice:      #f7f2e8;
+  --rice-dk:   #e2d8c4;
+  --parchment: #faf6ee;
+  --text-dk:   #1a2010;
+  --text-md:   #2d3d22;
+  --text-lt:   #ffffff;
+  --border:    #2d5a3d;
+
+  --sdg1:#c0182a; --sdg2:#b87000; --sdg3:#2e7a1e;
+  --sdg4:#a01020; --sdg5:#b82800; --sdg6:#0f6e8a; --sdg7:#a08000;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Noto Sans TC', sans-serif;
+  background: var(--ink);
+  color: var(--text-dk);
+  min-height:100vh;
+  overflow-x:hidden;
+  font-size:17px;
+}
+
+.screen { display:none; min-height:100vh; }
+.screen.active { display:flex; flex-direction:column; }
+
+/* ══════════════════════════════════════════
+   TITLE SCREEN
+══════════════════════════════════════════ */
+#screen-title {
+  background:
+    radial-gradient(ellipse 100% 40% at 50% 110%, rgba(184,134,11,0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 35% at 15% 80%, rgba(45,90,61,0.18) 0%, transparent 55%),
+    linear-gradient(160deg, #f0eadb 0%, #e8e2d0 50%, #ede4cc 100%);
+  align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+
+.stars { position:absolute; inset:0; pointer-events:none; }
+.star {
+  position:absolute; background:var(--forest); border-radius:50%; opacity:0.25;
+  animation:twinkle 3s ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%,100%{opacity:0.15;transform:scale(1);}
+  50%{opacity:0.9;transform:scale(1.6);}
+}
+
+.title-scene {
+  position:absolute; bottom:0; left:0; right:0;
+  height:50%; pointer-events:none;
+}
+
+.title-content {
+  position:relative; z-index:10;
+  text-align:center; padding:2rem;
+  animation:fadeUp 0.9s ease-out;
+}
+@keyframes fadeUp {
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.title-badge {
+  display:inline-block;
+  background:rgba(45,90,61,0.1);
+  border:1px solid var(--forest);
+  border-radius:20px; padding:0.35rem 1.1rem;
+  font-size:0.88rem; letter-spacing:0.12em;
+  color:var(--forest); margin-bottom:1.3rem;
+}
+
+.title-main {
+  font-family:'Noto Serif TC', serif;
+  font-size:clamp(2.2rem,8vw,3.5rem); font-weight:900;
+  line-height:1.2; margin-bottom:0.5rem;
+  background:linear-gradient(135deg, var(--forest) 0%, var(--gold-mid) 55%, var(--forest-mid) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.title-sub {
+  font-family:'DM Serif Display', serif; font-style:italic;
+  font-size:clamp(1.05rem,3vw,1.4rem);
+  color:rgba(45,90,61,0.6); letter-spacing:0.08em; margin-bottom:0.9rem;
+}
+.title-desc {
+  font-size:1rem; color:rgba(26,32,16,0.62);
+  max-width:320px; margin:0 auto 2rem; line-height:1.8;
+}
+
+.sdg-dots {
+  display:flex; gap:0.4rem; justify-content:center; margin-bottom:2.2rem;
+}
+.sdg-dot {
+  width:32px;height:32px; border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;color:white;
+  animation:dotPop 0.4s ease-out both;
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+@keyframes dotPop{from{opacity:0;transform:scale(0)rotate(-15deg);}to{opacity:1;transform:scale(1)rotate(0);}}
+.sdg-dot:nth-child(1){background:var(--sdg1);animation-delay:.08s;}
+.sdg-dot:nth-child(2){background:var(--sdg2);animation-delay:.16s;}
+.sdg-dot:nth-child(3){background:var(--sdg3);animation-delay:.24s;}
+.sdg-dot:nth-child(4){background:var(--sdg4);animation-delay:.32s;}
+.sdg-dot:nth-child(5){background:var(--sdg5);animation-delay:.40s;}
+.sdg-dot:nth-child(6){background:var(--sdg6);animation-delay:.48s;}
+.sdg-dot:nth-child(7){background:var(--sdg7);animation-delay:.56s;}
+
+.btn-start {
+  background:linear-gradient(135deg, var(--forest), var(--forest-mid));
+  color:var(--rice); border:2px solid var(--gold);
+  padding:1.1rem 2.8rem; border-radius:50px;
+  font-size:1.1rem; font-family:'Noto Serif TC',serif; font-weight:700;
+  cursor:pointer; letter-spacing:0.08em;
+  box-shadow:0 6px 28px rgba(184,134,11,0.3);
+  transition:all 0.25s;
+}
+.btn-start:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 36px rgba(184,134,11,0.45);
+  border-color:var(--gold-lt);
+}
+
+/* ══════════════════════════════════════════
+   GAME SCREEN
+══════════════════════════════════════════ */
+#screen-game {
+  background: linear-gradient(160deg, #f4eedd 0%, #ede4cc 100%);
+  flex-direction:column;
+}
+
+.game-header {
+  padding:1rem 1.3rem 0.8rem;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:2px solid rgba(45,90,61,0.2); flex-shrink:0;
+  background:rgba(247,242,232,0.9); backdrop-filter:blur(8px);
+}
+.game-title-small {
+  font-family:'Noto Serif TC',serif; font-size:1.05rem; font-weight:700;
+  color:var(--forest); letter-spacing:0.05em;
+}
+.progress-info {
+  font-size:0.88rem; color:var(--forest);
+  background:rgba(45,90,61,0.1); border:1px solid rgba(45,90,61,0.25);
+  padding:0.25rem 0.8rem; border-radius:20px;
+}
+
+/* MAP */
+.map-area {
+  flex:1; position:relative; overflow:hidden; min-height:0;
+}
+
+#hualien-map-svg {
+  position:absolute; inset:0; width:100%; height:100%;
+}
+
+/* ── TOWNSHIP REGIONS (clickable SVG paths) ── */
+.township {
+  cursor:pointer;
+  transition:opacity 0.2s, filter 0.2s;
+}
+.township:hover { opacity:0.85; filter:brightness(1.12); }
+.township.active-stop { filter:brightness(1.25) drop-shadow(0 0 8px rgba(184,134,11,0.8)); }
+
+/* Stop pins */
+.map-stop {
+  position:absolute; transform:translate(-50%,-50%);
+  cursor:pointer; z-index:10; transition:transform 0.25s;
+}
+.map-stop:hover { transform:translate(-50%,-50%) scale(1.18); }
+
+.stop-pin {
+  width:50px; height:50px; border-radius:50%;
+  border:3px solid rgba(247,242,232,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.25rem; position:relative;
+  box-shadow:0 4px 20px rgba(0,0,0,0.5);
+  transition:all 0.3s; backdrop-filter:blur(4px);
+}
+.stop-pin.unlocked { cursor:pointer; }
+.stop-pin.current {
+  border-color:var(--gold-lt);
+  animation:pulsePing 1.5s ease-in-out infinite;
+}
+.stop-pin.visited {
+  border-color:rgba(247,242,232,0.7);
+  box-shadow:0 0 20px rgba(184,134,11,0.4);
+}
+/* ALL pins are clickable now */
+.stop-pin { cursor:pointer; }
+
+@keyframes pulsePing {
+  0%,100%{box-shadow:0 0 0 0 rgba(184,134,11,0.5),0 4px 20px rgba(0,0,0,0.5);}
+  50%{box-shadow:0 0 0 16px rgba(184,134,11,0),0 4px 20px rgba(0,0,0,0.5);}
+}
+
+.stop-sdg-badge {
+  position:absolute; top:-9px; right:-9px;
+  width:22px; height:22px; border-radius:5px;
+  font-size:0.6rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  color:white; border:2px solid var(--rice);
+  box-shadow:0 2px 6px rgba(0,0,0,0.4);
+}
+.stop-label {
+  position:absolute; bottom:-24px; left:50%;
+  transform:translateX(-50%); white-space:nowrap;
+  font-size:0.76rem; color:var(--forest); font-weight:700;
+  text-shadow:none; letter-spacing:0.02em;
+  background:rgba(247,242,232,0.92); border:1px solid rgba(45,90,61,0.25);
+  padding:1px 6px; border-radius:4px;
+}
+
+.stop-visited-mark {
+  position:absolute; bottom:-6px; right:-6px;
+  width:18px; height:18px; background:var(--forest-mid);
+  border-radius:50%; display:none;
+  align-items:center; justify-content:center;
+  font-size:0.6rem; color:white; font-weight:700;
+  border:2px solid var(--rice);
+}
+.stop-visited-mark.show{display:flex;}
+
+.player-token {
+  position:absolute; width:32px; height:32px;
+  background:var(--gold-lt); border-radius:50%;
+  transform:translate(-50%,-50%); z-index:20;
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem;
+  box-shadow:0 4px 16px rgba(0,0,0,0.6), 0 0 0 3px rgba(184,134,11,0.5);
+  transition:all 0.85s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events:none;
+}
+
+/* ── BOTTOM PANEL ── */
+.bottom-panel {
+  background:rgba(247,242,232,0.97);
+  backdrop-filter:blur(20px);
+  border-top:2px solid rgba(45,90,61,0.18);
+  padding:1rem 1.2rem; flex-shrink:0;
+  box-shadow:0 -4px 20px rgba(45,90,61,0.08);
+}
+
+.dice-area {
+  display:flex; align-items:center; gap:1rem; margin-bottom:0.9rem;
+}
+.dice-display {
+  width:58px; height:58px; flex-shrink:0;
+  background:rgba(45,90,61,0.08);
+  border:2px solid rgba(45,90,61,0.3); border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:2rem; transition:all 0.2s;
+}
+.dice-display.rolling{animation:diceShake 0.5s ease-in-out;}
+@keyframes diceShake{
+  0%,100%{transform:rotate(0);}
+  20%{transform:rotate(-16deg)scale(1.12);}
+  40%{transform:rotate(16deg)scale(1.16);}
+  60%{transform:rotate(-10deg)scale(1.1);}
+  80%{transform:rotate(10deg)scale(1.05);}
+}
+.dice-info{flex:1;}
+.dice-result{font-size:0.92rem;color:rgba(26,32,16,0.6);margin-bottom:0.25rem;}
+.dice-result strong{color:var(--forest);font-size:1.05rem;}
+.position-text{font-size:0.82rem;color:rgba(26,32,16,0.45);}
+
+.btn-roll {
+  background:linear-gradient(135deg, var(--forest), var(--forest-mid));
+  color:var(--rice); border:2px solid var(--gold);
+  padding:0.8rem 1.5rem; border-radius:30px;
+  font-size:0.95rem; font-family:'Noto Sans TC',sans-serif; font-weight:600;
+  cursor:pointer; flex-shrink:0; transition:all 0.2s;
+  box-shadow:0 4px 16px rgba(184,134,11,0.25);
+}
+.btn-roll:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(184,134,11,0.4);}
+.btn-roll:disabled{opacity:0.35;cursor:not-allowed;transform:none;}
+
+.stop-preview {
+  background:rgba(45,90,61,0.06);
+  border:1px solid rgba(45,90,61,0.2); border-radius:12px;
+  padding:0.8rem 1rem; display:flex; align-items:center; gap:0.8rem;
+}
+.preview-emoji{font-size:1.6rem;flex-shrink:0;}
+.preview-text{flex:1;}
+.preview-name{font-size:0.96rem;font-weight:600;color:var(--text-dk);margin-bottom:0.18rem;}
+.preview-sdg{font-size:0.82rem;color:rgba(26,32,16,0.5);}
+.btn-explore {
+  background:linear-gradient(135deg,var(--gold),var(--gold-mid));
+  color:var(--ink-deep); border:none; padding:0.55rem 1rem;
+  border-radius:20px; font-size:0.82rem;
+  font-family:'Noto Sans TC',sans-serif; font-weight:700;
+  cursor:pointer; flex-shrink:0; transition:all 0.2s;
+}
+.btn-explore:hover{transform:translateY(-2px);}
+
+/* ══════════════════════════════════════════
+   CARD OVERLAY
+══════════════════════════════════════════ */
+#screen-card {
+  position:fixed; inset:0; z-index:100;
+  background:rgba(232,224,200,0.88); backdrop-filter:blur(12px);
+  align-items:center; justify-content:center; padding:1.2rem;
+  display:none;
+}
+#screen-card.active{display:flex;}
+
+.card-container {
+  background:linear-gradient(160deg, #faf6ee, #f4edd8);
+  border-radius:24px;
+  border:1px solid rgba(45,90,61,0.2);
+  box-shadow:0 0 0 1px rgba(45,90,61,0.08), 0 20px 60px rgba(26,32,16,0.18);
+  max-width:440px; width:100%; overflow:hidden;
+  animation:cardUp 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  max-height:90vh; overflow-y:auto;
+}
+@keyframes cardUp{
+  from{opacity:0;transform:translateY(40px)scale(0.93);}
+  to{opacity:1;transform:translateY(0)scale(1);}
+}
+
+.card-header{padding:1.5rem 1.5rem 1rem;position:relative;}
+
+.card-sdg-tag {
+  display:inline-flex; align-items:center; gap:0.4rem;
+  padding:0.35rem 0.9rem; border-radius:20px;
+  font-size:0.82rem; font-weight:700; color:white;
+  letter-spacing:0.08em; margin-bottom:0.9rem;
+}
+
+.card-location-name {
+  font-family:'Noto Serif TC',serif; font-size:1.5rem; font-weight:700;
+  color:var(--text-dk); margin-bottom:0.35rem; line-height:1.3;
+}
+.card-region{font-size:0.86rem;color:rgba(26,32,16,0.5);}
+.card-hero-emoji{font-size:3.8rem;text-align:center;padding:0.8rem 0 0.5rem;}
+
+/* Gold top border on card */
+.card-gold-bar {
+  height:4px;
+  background:linear-gradient(90deg, transparent, var(--gold), var(--gold-lt), var(--gold), transparent);
+}
+
+.card-divider{height:1px;background:rgba(45,90,61,0.12);margin:0 1.5rem;}
+
+.card-body{padding:1.1rem 1.5rem;}
+.card-story{
+  font-size:0.95rem; color:rgba(26,32,16,0.72);
+  line-height:1.88; margin-bottom:1.1rem;
+}
+
+/* Snapshot */
+.snapshot-mini {
+  background:rgba(138,98,0,0.08);
+  border:1px solid rgba(138,98,0,0.25);
+  border-radius:14px; padding:0.9rem 1.1rem; margin-bottom:1.1rem;
+}
+.snapshot-mini-title {
+  font-size:0.76rem; font-weight:700; color:var(--gold);
+  letter-spacing:0.1em; text-transform:uppercase; margin-bottom:0.7rem;
+}
+.snapshot-row {
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:0.32rem 0; border-bottom:1px solid rgba(247,242,232,0.05);
+  font-size:0.86rem;
+}
+.snapshot-row:last-child{border-bottom:none;}
+.snapshot-label{color:rgba(26,32,16,0.52);}
+.snapshot-value{color:var(--text-dk);font-weight:600;text-align:right;max-width:58%;}
+
+/* Task */
+.task-box {
+  background:rgba(45,90,61,0.07);
+  border:1px solid rgba(45,90,61,0.22);
+  border-radius:14px; padding:1rem 1.1rem; margin-bottom:1rem;
+}
+.task-title {
+  font-size:0.76rem; font-weight:700; color:var(--forest);
+  letter-spacing:0.1em; margin-bottom:0.55rem; text-transform:uppercase;
+}
+.task-content{font-size:0.94rem;color:rgba(26,32,16,0.78);line-height:1.75;}
+.task-options{display:flex;flex-direction:column;gap:0.55rem;margin-top:0.8rem;}
+.task-option {
+  background:rgba(247,242,232,0.7);
+  border:1px solid rgba(45,90,61,0.18);
+  border-radius:10px; padding:0.78rem 1rem; font-size:0.9rem;
+  color:rgba(26,32,16,0.78); cursor:pointer; transition:all 0.2s; text-align:left;
+}
+.task-option:hover{background:rgba(45,90,61,0.12);border-color:rgba(45,90,61,0.4);color:var(--forest);}
+.task-option.correct{background:rgba(45,90,61,0.18);border-color:var(--forest);color:var(--forest);}
+.task-option.wrong{background:rgba(200,30,30,0.05);border-color:rgba(200,30,30,0.2);color:rgba(26,32,16,0.4);}
+
+.answer-feedback {
+  font-size:0.9rem; padding:0.6rem 0.9rem; border-radius:10px;
+  margin-top:0.6rem; display:none; line-height:1.65;
+}
+.answer-feedback.show{display:block;}
+.answer-feedback.right{background:rgba(45,90,61,0.12);color:var(--forest);}
+.answer-feedback.wrong-fb{background:rgba(138,98,0,0.1);color:var(--gold);}
+
+.card-footer{padding:0.9rem 1.5rem 1.5rem;display:flex;gap:0.8rem;}
+.btn-continue {
+  flex:1; background:linear-gradient(135deg,var(--forest),var(--forest-mid));
+  color:var(--text-lt); border:2px solid var(--forest-mid);
+  padding:0.88rem; border-radius:14px;
+  font-size:0.95rem; font-family:'Noto Serif TC',serif; font-weight:700;
+  cursor:pointer; transition:all 0.2s; letter-spacing:0.05em;
+}
+.btn-continue:hover{opacity:0.9;transform:translateY(-1px);}
+.btn-close-card {
+  background:rgba(45,90,61,0.06);
+  color:rgba(26,32,16,0.55);
+  border:1px solid rgba(45,90,61,0.2);
+  padding:0.88rem 1.1rem; border-radius:14px;
+  font-size:0.9rem; cursor:pointer; transition:all 0.2s;
+}
+.btn-close-card:hover{background:rgba(45,90,61,0.12);color:var(--forest);}
+
+/* ══════════════════════════════════════════
+   COMPLETE SCREEN
+══════════════════════════════════════════ */
+#screen-complete {
+  background:radial-gradient(ellipse at 50% 110%, rgba(45,90,61,0.25) 0%, var(--ink) 65%);
+  align-items:center; justify-content:center; text-align:center; padding:2rem;
+}
+.complete-emoji{font-size:4.5rem;margin-bottom:1rem;animation:bounce 1.2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+.complete-title {
+  font-family:'Noto Serif TC',serif; font-size:2rem; font-weight:900;
+  background:linear-gradient(135deg, var(--forest) 0%, var(--gold-mid) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text; margin-bottom:0.6rem;
+}
+.complete-sub{font-size:1rem;color:rgba(26,32,16,0.6);margin-bottom:1.5rem;line-height:1.8;}
+.complete-sdgs{
+  display:grid; grid-template-columns:repeat(7,1fr); gap:0.5rem;
+  margin-bottom:1.5rem; max-width:340px; margin-left:auto; margin-right:auto;
+}
+.complete-sdg {
+  aspect-ratio:1; border-radius:9px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;color:white;padding:4px;
+  animation:popIn 0.4s ease-out both;
+}
+@keyframes popIn{from{opacity:0;transform:scale(0.4)rotate(-15deg);}to{opacity:1;transform:scale(1)rotate(0);}}
+.complete-book {
+  background:rgba(45,90,61,0.07);
+  border:1px solid rgba(45,90,61,0.2);
+  border-radius:18px; padding:1.3rem; max-width:340px;
+  margin:0 auto 1.5rem; font-size:0.94rem;
+  color:rgba(26,32,16,0.65); line-height:1.88;
+}
+.complete-book strong{color:var(--forest);}
+.btn-restart {
+  background:rgba(45,90,61,0.08);
+  color:rgba(26,32,16,0.6);
+  border:1px solid rgba(45,90,61,0.2);
+  padding:0.8rem 1.8rem; border-radius:30px;
+  font-size:0.94rem; cursor:pointer; transition:all 0.2s;
+}
+.btn-restart:hover{background:rgba(45,90,61,0.15);color:var(--forest);}
+
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(45,90,61,0.3);border-radius:2px;}
+</style>
+</head>
+<body>
+
+<!-- ══ TITLE ══ -->
+<div id="screen-title" class="screen active">
+  <div class="stars" id="stars"></div>
+  <svg class="title-scene" viewBox="0 0 400 220" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="tmtn1" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#2d5a3d" stop-opacity="0.9"/>
+        <stop offset="100%" stop-color="#1a3d27" stop-opacity="0.2"/>
+      </linearGradient>
+      <linearGradient id="tmtn2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#4a7c5a" stop-opacity="0.7"/>
+        <stop offset="100%" stop-color="#2d5a3d" stop-opacity="0.15"/>
+      </linearGradient>
+      <linearGradient id="tgold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#d4a017" stop-opacity="0.5"/>
+        <stop offset="100%" stop-color="#b8860b" stop-opacity="0.15"/>
+      </linearGradient>
+    </defs>
+    <polygon points="0,220 50,75 100,135 160,25 230,110 295,45 360,88 400,65 400,220" fill="url(#tmtn1)"/>
+    <polygon points="0,220 0,178 75,128 145,172 215,92 280,148 345,108 400,158 400,220" fill="url(#tmtn2)"/>
+    <path d="M0,205 Q100,188 200,202 Q300,218 400,202 L400,220 L0,220Z" fill="url(#tgold)"/>
+  </svg>
+  <div class="title-content">
+    <div class="title-badge">🌿 花蓮縣政府 × 洄瀾永續專刊 vol.3</div>
+    <div class="title-main">洄瀾永續<br>探索地圖</div>
+    <div class="title-sub">Hualien SDGs Adventure</div>
+    <div class="title-desc">以花蓮真實地圖為棋盤，走過七個鄉鎮，遇見正在改變世界的平凡人</div>
+    <div class="sdg-dots">
+      <div class="sdg-dot">1</div><div class="sdg-dot">2</div><div class="sdg-dot">3</div>
+      <div class="sdg-dot">4</div><div class="sdg-dot">5</div><div class="sdg-dot">6</div>
+      <div class="sdg-dot">7</div>
+    </div>
+    <button class="btn-start" onclick="startGame()">🎲 開始探索</button>
+  </div>
+</div>
+
+<!-- ══ GAME ══ -->
+<div id="screen-game" class="screen">
+  <div class="game-header">
+    <div class="game-title-small">🗺 花蓮縣 SDGs 探索地圖</div>
+    <div class="progress-info" id="progress-text">已探索 0 / 7 個地點</div>
+  </div>
+
+  <div class="map-area" id="map-area">
+    <!-- ═══ HUALIEN SVG MAP — 依照實際行政區描繪 ═══ -->
+    <svg id="hualien-map-svg" viewBox="0 0 300 520" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#0f1a0f"/>
+          <stop offset="100%" stop-color="#0a1018"/>
+        </linearGradient>
+        <linearGradient id="oceanGrad" x1="1" y1="0" x2="0" y2="0">
+          <stop offset="0%" stop-color="#2a7a9a" stop-opacity="0.45"/>
+          <stop offset="70%" stop-color="#5aaccb" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="transparent"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Background -->
+      <rect width="300" height="520" fill="#ddd8c2"/>
+
+      <!-- ══ TOWNSHIP POLYGONS ══
+           Traced from the reference map image (proportional)
+           ViewBox 300×520, map area roughly fills the space
+           Townships from N to S: 秀林、新城、花蓮市、吉安、壽豐、萬榮、鳳林、光復、豐濱、瑞穗、卓溪、玉里、富里
+      -->
+
+      <!-- 秀林鄉 — 北部大鄉，覆蓋西北大片山地 (blue-gray in reference) -->
+      <polygon class="township" id="tw-秀林鄉"
+        points="15,10 85,10 110,18 125,30 120,55 115,75 105,95 85,108 65,115 45,118 30,110 20,90 12,65 10,40"
+        fill="#3d6b7a" fill-opacity="0.75" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="52" y="58" font-size="11" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">秀林鄉</text>
+
+      <!-- 新城鄉 — 東北小鄉 (pink/rose in reference) -->
+      <polygon class="township" id="tw-新城鄉"
+        points="148,10 195,10 205,22 200,36 185,42 168,38 150,30"
+        fill="#9b7a8a" fill-opacity="0.75" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="178" y="26" font-size="7.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">新城鄉</text>
+
+      <!-- 花蓮市 — 東北沿海小市 (teal in reference) -->
+      <polygon class="township" id="tw-花蓮市"
+        points="185,42 205,22 230,25 238,45 225,60 205,62 188,55"
+        fill="#4a8a7a" fill-opacity="0.75" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="210" y="46" font-size="7.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">花蓮市</text>
+
+      <!-- 吉安鄉 — 東部沿海，花蓮市南側 (green in reference) -->
+      <polygon class="township" id="tw-吉安鄉"
+        points="170,55 188,55 205,62 225,60 232,78 218,90 195,92 172,85 162,72"
+        fill="#5a8a5a" fill-opacity="0.75" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="198" y="76" font-size="7.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">吉安鄉</text>
+
+      <!-- 壽豐鄉 — 東側中北部 (olive/tan in reference) -->
+      <polygon class="township" id="tw-壽豐鄉"
+        points="115,75 140,68 162,72 172,85 195,92 218,90 232,78 240,100 232,120 218,130 195,132 175,128 155,120 135,115 115,108 105,95"
+        fill="#8a8a4a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="185" y="108" font-size="8.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">壽豐鄉</text>
+
+      <!-- 萬榮鄉 — 中西部大鄉 (olive green in reference) -->
+      <polygon class="township" id="tw-萬榮鄉"
+        points="30,110 45,118 65,115 85,108 105,95 115,108 115,135 108,165 95,188 72,200 48,195 30,182 18,160 15,138"
+        fill="#6a7a3a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="65" y="158" font-size="10" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">萬榮鄉</text>
+
+      <!-- 鳳林鎮 — 中部 (tan/brown in reference) -->
+      <polygon class="township" id="tw-鳳林鎮"
+        points="135,115 155,120 175,128 195,132 218,130 232,120 240,140 228,158 210,165 190,162 170,158 148,152 132,142"
+        fill="#9a7a5a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="185" y="148" font-size="8.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">鳳林鎮</text>
+
+      <!-- 光復鄉 — 中部縱谷 (blue-green in reference) -->
+      <polygon class="township" id="tw-光復鄉"
+        points="108,165 115,135 132,142 148,152 170,158 190,162 210,165 228,158 235,178 222,195 200,200 178,198 158,192 138,185 118,180"
+        fill="#4a7a8a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="175" y="185" font-size="8.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">光復鄉</text>
+
+      <!-- 豐濱鄉 — 東海岸 (pink/mauve in reference) -->
+      <polygon class="township" id="tw-豐濱鄉"
+        points="232,120 248,115 262,125 268,150 265,180 258,210 250,238 240,260 228,270 222,250 228,220 235,195 235,178 228,158 240,140"
+        fill="#8a5a7a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="252" y="188" font-size="8" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">豐濱鄉</text>
+
+      <!-- 瑞穗鄉 — 中部偏南 (light blue in reference) -->
+      <polygon class="township" id="tw-瑞穗鄉"
+        points="118,180 138,185 158,192 178,198 200,200 222,195 228,220 222,250 210,262 192,268 172,265 150,260 130,252 115,238 108,218 110,198"
+        fill="#5a7a9a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="175" y="232" font-size="8.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">瑞穗鄉</text>
+
+      <!-- 卓溪鄉 — 南部大鄉，覆蓋西南山地 (blue-gray large in reference) -->
+      <polygon class="township" id="tw-卓溪鄉"
+        points="18,160 30,182 48,195 72,200 95,188 108,218 110,238 108,260 100,285 88,305 70,318 48,322 28,312 15,292 10,265 12,238 15,210 18,182"
+        fill="#4a6a8a" fill-opacity="0.75" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="58" y="268" font-size="11" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">卓溪鄉</text>
+
+      <!-- 玉里鎮 — 中南部 (mauve/brown in reference) -->
+      <polygon class="township" id="tw-玉里鎮"
+        points="115,238 130,252 150,260 172,265 192,268 210,262 222,250 228,270 220,290 205,302 185,308 162,308 140,302 120,292 108,275 108,260"
+        fill="#8a6a5a" fill-opacity="0.65" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="170" y="285" font-size="9" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">玉里鎮</text>
+
+      <!-- 富里鄉 — 最南部 (dark rose/brown in reference) -->
+      <polygon class="township" id="tw-富里鄉"
+        points="100,285 108,275 108,260 120,292 140,302 162,308 185,308 205,302 220,290 228,270 240,278 248,298 245,325 230,345 210,358 188,365 165,365 142,355 120,340 100,322 88,305"
+        fill="#7a5a6a" fill-opacity="0.75" stroke="rgba(45,90,61,0.55)" stroke-width="1.5"/>
+      <text x="168" y="330" font-size="9.5" fill="rgba(20,30,15,0.85)" font-family="'Noto Sans TC',sans-serif" font-weight="700" text-anchor="middle">富里鄉</text>
+
+      <!-- Ocean (Pacific East side) -->
+      <path d="M230,25 L285,30 L292,80 L288,140 L280,200 L272,260 L268,320 L265,380 L260,420 L248,298 L240,278 L228,270 L240,260 L250,238 L258,210 L265,180 L268,150 L262,125 L248,115 L232,120 L240,100 L232,78 L238,45Z"
+        fill="url(#oceanGrad)"/>
+
+      <!-- Pacific label -->
+      <text x="272" y="200" font-size="8" fill="rgba(20,80,120,0.6)"
+            font-family="'Noto Serif TC',sans-serif" text-anchor="middle" transform="rotate(18,272,200)">太平洋</text>
+      <text x="275" y="212" font-size="6" fill="rgba(20,80,120,0.4)"
+            font-family="serif" text-anchor="middle" transform="rotate(18,275,212)">Pacific Ocean</text>
+
+      <!-- Central Mountain Range label -->
+      <text x="18" y="210" font-size="7" fill="rgba(30,70,40,0.5)"
+            font-family="'Noto Serif TC',sans-serif" text-anchor="middle" transform="rotate(-88,18,210)">中央山脈</text>
+
+      <!-- Rift Valley line (縱谷) -->
+      <path d="M125,30 Q130,100 128,170 Q126,240 125,310 Q124,350 120,390"
+            stroke="rgba(100,70,0,0.2)" stroke-width="2" fill="none" stroke-dasharray="5,4"/>
+      <text x="120" y="230" font-size="6.5" fill="rgba(100,70,0,0.3)"
+            font-family="'Noto Serif TC',sans-serif" transform="rotate(-88,120,230)">花東縱谷</text>
+
+      <!-- Path connecting stops -->
+      <polyline id="path-polyline"
+        stroke="rgba(184,134,11,0.3)" stroke-width="1.8"
+        stroke-dasharray="5,4" fill="none"
+        style="animation:dashFlow 20s linear infinite; stroke-dashoffset:0;"/>
+      <style>@keyframes dashFlow{to{stroke-dashoffset:-130;}}</style>
+
+      <!-- Compass -->
+      <g transform="translate(272,40)">
+        <circle cx="0" cy="0" r="13" fill="rgba(0,0,0,0.5)" stroke="rgba(184,134,11,0.3)" stroke-width="1"/>
+        <polygon points="0,-10 3,-3 -3,-3" fill="rgba(229,36,59,0.8)"/>
+        <polygon points="0,10 3,3 -3,3" fill="rgba(247,242,232,0.4)"/>
+        <text x="0" y="-14" font-size="6.5" fill="rgba(229,36,59,0.8)" text-anchor="middle">N</text>
+      </g>
+
+      <!-- Scale bar -->
+      <g transform="translate(14,495)">
+        <line x1="0" y1="0" x2="32" y2="0" stroke="rgba(247,242,232,0.25)" stroke-width="1.2"/>
+        <line x1="0" y1="-3" x2="0" y2="3" stroke="rgba(247,242,232,0.25)" stroke-width="1.2"/>
+        <line x1="32" y1="-3" x2="32" y2="3" stroke="rgba(247,242,232,0.25)" stroke-width="1.2"/>
+        <text x="16" y="-5" font-size="6" fill="rgba(247,242,232,0.3)" text-anchor="middle">約30km</text>
+      </g>
+    </svg>
+
+    <!-- Stop pins (over SVG) -->
+    <div id="stops-container"></div>
+    <!-- Player token -->
+    <div class="player-token" id="player-token">🏃</div>
+  </div>
+
+  <div class="bottom-panel">
+    <div class="dice-area">
+      <div class="dice-display" id="dice-display">🎲</div>
+      <div class="dice-info">
+        <div class="dice-result" id="dice-result">按下骰子，開始探索花蓮</div>
+        <div class="position-text" id="position-text">💡 任何時候都可點選地圖上的圓點查看故事</div>
+      </div>
+      <button class="btn-roll" id="btn-roll" onclick="rollDice()">擲骰 🎲</button>
+    </div>
+    <div class="stop-preview" id="stop-preview">
+      <div class="preview-emoji">🗺️</div>
+      <div class="preview-text">
+        <div class="preview-name">準備出發</div>
+        <div class="preview-sdg">擲骰移動，或直接點地圖圓點查看各地故事</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CARD ══ -->
+<div id="screen-card" class="screen">
+  <div class="card-container" id="card-container"></div>
+</div>
+
+<!-- ══ COMPLETE ══ -->
+<div id="screen-complete" class="screen">
+  <div class="complete-emoji">🎉</div>
+  <div class="complete-title">探索完成！</div>
+  <div class="complete-sub">你已走遍花蓮七個鄉鎮<br>認識了七位正在改變世界的花蓮人</div>
+  <div class="complete-sdgs" id="complete-sdgs"></div>
+  <div class="complete-book">
+    想深入了解每一個故事？<br>
+    掃描現場QR碼，閱讀<strong>《因為對大山大海的承諾 vol.3》</strong><br>
+    完整雙語專刊——花蓮永續實踐者的真實記錄
+  </div>
+  <button class="btn-restart" onclick="restartGame()">🔄 再玩一次</button>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────────────
+// mapX/Y: percentage of map-area div, aligned with SVG viewBox 300×520
+// Positions derived from reference map image + township polygon centers above
+
+const STOPS = [
+  {
+    id:1, sdg:1, color:'#e5243b', emoji:'🏘️',
+    name:'卓溪部落互助合作社', region:'卓溪鄉',
+    mapX:24, mapY:60,   // 卓溪鄉 center
+    story:'在台灣相對弱勢的山地鄉，卓溪的布農族族人不等補助，自組互助合作社，以換工精神重建社區經濟韌性。阿公說：「我們從來不覺得自己窮，因為我們有彼此。」',
+    snapshot:[
+      {label:'受益家戶',value:'82戶（全鄉38%）'},
+      {label:'家庭年收入增幅',value:'+27%（受訪者自報）'},
+      {label:'創造在地就業',value:'34人次/年'},
+    ],
+    task:'終結貧窮的核心，不只是給錢，而是？',
+    options:['更多政府補助','重建社區互助關係','引入大企業投資'],
+    answer:1,
+    feedback:'正確！SDG1的精神在於「系統性脫貧」，社區韌性與互助文化，才是讓貧窮無法再生的根本解方。',
+    feedbackWrong:'再想想——SDG1不只是「給錢」，而是重建人與人之間的支持系統。',
+    ecoBiz:'適合：企業偏鄉社區投資、員工志工服務合作',
+  },
+  {
+    id:2, sdg:2, color:'#dda63a', emoji:'🌾',
+    name:'富里有機農場食農教育基地', region:'富里鄉',
+    mapX:55, mapY:80,   // 富里鄉 center
+    story:'富里的有機農業面積全台第一，卻長期不被外界認識。阿明的農場十年前只種4種作物，如今復育了23種祖先吃過的傳統糧食。「消除飢餓不是種更多，是種得更對。」',
+    snapshot:[
+      {label:'有機耕作面積',value:'12公頃（較前成長3倍）'},
+      {label:'年受益學童',value:'1,200名（6所學校）'},
+      {label:'傳統作物復育',value:'23種（原僅4種）'},
+    ],
+    task:'食農教育的最大價值是？',
+    options:['讓學生學會種菜','重建人與食物的關係','降低進口食品依賴'],
+    answer:1,
+    feedback:'答對了！食農教育的本質是「重新連結」——讓每個人知道食物從哪裡來，才能做出永續的選擇。',
+    feedbackWrong:'種菜只是手段，SDG2的深層目標是讓人重新認識食物、土地與生命的關係。',
+    ecoBiz:'適合：企業農業供應鏈在地採購、員工ESG體驗活動',
+  },
+  {
+    id:3, sdg:3, color:'#4c9f38', emoji:'🌿',
+    name:'吉安社區自然療癒農場', region:'吉安鄉',
+    mapX:72, mapY:18,   // 吉安鄉 center
+    story:'花蓮偏鄉醫療資源不足，反而逼出了創新。阿嬤從中西醫合療出發，將農場改造成長照結合自然療癒的空間。每週三十位老人在這裡種菜、聊天、被看見。「藥不能治的，土地治。」',
+    snapshot:[
+      {label:'服務長者',value:'每週30人次'},
+      {label:'就醫交通縮短',value:'平均省2.5小時/次'},
+      {label:'心理健康介入',value:'12位高風險個案轉介'},
+    ],
+    task:'SDG3「健康與福祉」中，最被忽略的面向是？',
+    options:['身體疾病的治療','心理健康與社會連結','醫院的數量'],
+    answer:1,
+    feedback:'太棒了！WHO早在1948年就定義：健康不只是沒有疾病，而是身體、心理與社會的完全福祉。',
+    feedbackWrong:'SDG3的「福祉」包含心理健康與社會歸屬感——這正是花蓮自然療癒農場填補的空缺。',
+    ecoBiz:'適合：員工健康促進合作、銀髮產業CSR投資',
+  },
+  {
+    id:4, sdg:4, color:'#c5192d', emoji:'📚',
+    name:'豐濱原住民實驗學校', region:'豐濱鄉',
+    mapX:80, mapY:47,   // 豐濱鄉 center (east coast)
+    story:'台灣實驗教育密度最高的縣，在花蓮。豐濱的阿美族老師拒絕照本宣科，用海洋文化設計課程。孩子在課堂上學捕魚、學族語、學怎麼成為一個對部落有用的人。「最好的課本，是我們的海。」',
+    snapshot:[
+      {label:'受益學生',value:'180名（全校）'},
+      {label:'課程文化比例',value:'40%（超越課綱標準）'},
+      {label:'族語能力提升',value:'中高級通過率+65%'},
+    ],
+    task:'「優質教育」最根本的意義是？',
+    options:['讓所有人考上大學','讓每個人活出自己的潛能','教育經費的公平分配'],
+    answer:1,
+    feedback:'正確！SDG4強調「包容、公平、有品質的教育」——讓每個孩子，用自己的方式，發揮獨特的潛能。',
+    feedbackWrong:'SDG4不只是升學率，而是讓不同文化背景的孩子，都能找到適合自己的學習方式。',
+    ecoBiz:'適合：企業偏鄉教育贊助、文化多元性ESG揭露',
+  },
+  {
+    id:5, sdg:5, color:'#ff3a21', emoji:'👩‍🌾',
+    name:'光復阿美族女性創業聚落', region:'光復鄉',
+    mapX:60, mapY:44,   // 光復鄉 center
+    story:'在傳統上男性主導的部落社會，光復的阿美族女性卻悄悄建立了一個創業聚落。她們賣手作、辦工作坊、帶企業ESG體驗——沒有人告訴她們可以，但她們就是做了。「我們不是在爭權利，我們在創造選擇。」',
+    snapshot:[
+      {label:'女性創業受益人數',value:'28位（近三年）'},
+      {label:'家庭收入女性貢獻',value:'從12%升至41%'},
+      {label:'性別平等培訓',value:'逾350人次/年'},
+    ],
+    task:'真正的性別平權，最需要改變的是？',
+    options:['法律保障','文化與社會期待','教育機會均等'],
+    answer:1,
+    feedback:'答對！法律是底線，但真正讓女性能自由選擇的，是文化觀念的改變——花蓮的女性們正在用行動示範這件事。',
+    feedbackWrong:'法律與教育都很重要，但SDG5的核心挑戰在於根深柢固的文化偏見與社會期待。',
+    ecoBiz:'適合：企業女性賦權CSR、DEI供應鏈在地合作',
+  },
+  {
+    id:6, sdg:6, color:'#26bde2', emoji:'💧',
+    name:'壽豐秀姑巒溪流域守護隊', region:'壽豐鄉',
+    mapX:68, mapY:27,   // 壽豐鄉 center
+    story:'秀姑巒溪是花蓮最重要的水脈。一群素人志工，每月巡守12公里溪岸，用手機記錄水質、移除外來種、教導下游居民理解上游的選擇如何影響他們的水。',
+    snapshot:[
+      {label:'守護流域長度',value:'12公里（月巡守）'},
+      {label:'水質監測點',value:'8個自主監測站'},
+      {label:'受益下游人口',value:'逾2.3萬人'},
+    ],
+    task:'水資源治理最難突破的是？',
+    options:['技術不足','上下游之間缺乏連結感','政府經費不夠'],
+    answer:1,
+    feedback:'說得精準！SDG6的核心挑戰是「系統性的水資源共識」——住在上游的人要理解，他們的每個選擇，都流向了下游的杯子。',
+    feedbackWrong:'技術和經費都是工具，SDG6最難的是讓所有人感受到自己與水系統的連結，進而改變行為。',
+    ecoBiz:'適合：企業水資源ESG揭露、流域保護公益合作',
+  },
+  {
+    id:7, sdg:7, color:'#fcc30b', emoji:'☀️',
+    name:'秀林竹炭暨太陽能合作社', region:'秀林鄉',
+    mapX:35, mapY:17,   // 秀林鄉 center (large NW township)
+    story:'深山裡的太魯閣族人發現了一件事：祖先的竹炭技術，竟然是現代碳匯的在地解方。他們組了合作社，一邊燒竹炭固碳，一邊架太陽能板賣電。「潔淨能源不用從都市進口，我們山上就有。」',
+    snapshot:[
+      {label:'竹炭固碳量',value:'約18公噸CO₂e/年'},
+      {label:'太陽能裝置容量',value:'45kW（社區自發自用）'},
+      {label:'能源費用節省',value:'受益12戶省約40%'},
+    ],
+    task:'「能源民主」的核心精神是？',
+    options:['全面依賴再生能源','讓社區掌握自己的能源','降低電費'],
+    answer:1,
+    feedback:'答對了！SDG7不只是「潔淨」，更是「可負擔」與「可及」——讓偏遠社區也能掌握自己的能源命運，這才是能源正義。',
+    feedbackWrong:'電費只是指標，SDG7的深層精神是讓每個社區，特別是弱勢社群，都有掌握自己能源的能力。',
+    ecoBiz:'適合：企業碳抵換在地合作、再生能源ESG供應鏈',
+  },
+];
+
+const DICE_FACES = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+let state = { currentPos:0, visited:new Set(), rolling:false, cardOpen:false };
+
+// ── INIT ─────────────────────────────────────────────────────────────────────
+function init() {
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 55; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const sz = Math.random()*2.5+0.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*4}s;animation-duration:${2+Math.random()*3}s;`;
+    starsEl.appendChild(s);
+  }
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById('screen-'+id);
+  if (el) el.classList.add('active');
+}
+
+function startGame() {
+  showScreen('game');
+  renderStops();
+  updateToken(0, true);
+  updateUI();
+}
+
+// ── RENDER STOPS ─────────────────────────────────────────────────────────────
+function renderStops() {
+  const container = document.getElementById('stops-container');
+  container.innerHTML = '';
+
+  // Update SVG path
+  const pts = STOPS.map(s => `${s.mapX/100*300},${s.mapY/100*520}`);
+  document.getElementById('path-polyline').setAttribute('points', pts.join(' '));
+
+  STOPS.forEach(stop => {
+    const el = document.createElement('div');
+    el.className = 'map-stop';
+    el.id = 'stop-' + stop.id;
+    el.style.left = stop.mapX + '%';
+    el.style.top  = stop.mapY + '%';
+
+    // ★ 修正：所有地點都可點選，不限已探索
+    el.onclick = () => openCard(stop);
+
+    el.innerHTML = `
+      <div class="stop-pin" style="background:${stop.color}28;border-color:${stop.color}66;">
+        <span>${stop.emoji}</span>
+        <div class="stop-sdg-badge" style="background:${stop.color}">SDG${stop.sdg}</div>
+        <div class="stop-visited-mark" id="visited-${stop.id}">✓</div>
+      </div>
+      <div class="stop-label">${stop.region}</div>
+    `;
+    container.appendChild(el);
+  });
+}
+
+// ── TOKEN ─────────────────────────────────────────────────────────────────────
+function updateToken(stopIndex, instant=false) {
+  const token = document.getElementById('player-token');
+  let x, y;
+  if (stopIndex === 0) {
+    x = 72; y = 14; // 花蓮市附近
+  } else {
+    const stop = STOPS[stopIndex-1];
+    x = stop.mapX; y = stop.mapY - 8;
+  }
+  if (instant) {
+    token.style.transition='none';
+    token.style.left=x+'%'; token.style.top=y+'%';
+    setTimeout(()=>{token.style.transition='';},50);
+  } else {
+    token.style.left=x+'%'; token.style.top=y+'%';
+  }
+}
+
+// ── DICE ─────────────────────────────────────────────────────────────────────
+function rollDice() {
+  if (state.rolling || state.cardOpen || state.visited.size >= 7) return;
+  state.rolling = true;
+  document.getElementById('btn-roll').disabled = true;
+
+  const diceEl = document.getElementById('dice-display');
+  diceEl.classList.add('rolling');
+  const roll = Math.floor(Math.random()*6)+1;
+  let ticks = 0;
+
+  const iv = setInterval(()=>{
+    diceEl.textContent = DICE_FACES[Math.floor(Math.random()*6)];
+    if (++ticks >= 9) {
+      clearInterval(iv);
+      diceEl.classList.remove('rolling');
+      diceEl.textContent = DICE_FACES[roll-1];
+      finishRoll(roll);
+    }
+  }, 75);
+}
+
+function finishRoll(roll) {
+  const nextPos = (state.currentPos % 7) + 1;
+  const stop = STOPS[nextPos-1];
+  document.getElementById('dice-result').innerHTML = `骰出 <strong>${roll}</strong> 點，前往 ${stop.region}…`;
+  document.getElementById('position-text').textContent = `移動到：${stop.name}`;
+
+  setTimeout(()=>{
+    state.currentPos = nextPos;
+    state.visited.add(stop.id);
+    updateToken(nextPos);
+    updatePins();
+    updateUI();
+    setTimeout(()=>{ state.rolling=false; openCard(stop); }, 920);
+  }, 280);
+}
+
+function updatePins() {
+  STOPS.forEach(stop=>{
+    const pin = document.getElementById('stop-'+stop.id)?.querySelector('.stop-pin');
+    const mark = document.getElementById('visited-'+stop.id);
+    if (!pin) return;
+    pin.classList.remove('current','visited');
+    if (stop.id === state.currentPos) {
+      pin.classList.add('current');
+      pin.style.background = stop.color+'44';
+      pin.style.borderColor = stop.color;
+    } else if (state.visited.has(stop.id)) {
+      pin.classList.add('visited');
+      pin.style.background = stop.color+'30';
+      pin.style.borderColor = stop.color+'99';
+      if (mark) mark.classList.add('show');
+    }
+  });
+}
+
+function updateUI() {
+  const n = state.visited.size;
+  document.getElementById('progress-text').textContent = `已探索 ${n} / 7 個地點`;
+
+  if (state.currentPos > 0) {
+    const stop = STOPS[state.currentPos-1];
+    document.getElementById('stop-preview').innerHTML = `
+      <div class="preview-emoji">${stop.emoji}</div>
+      <div class="preview-text">
+        <div class="preview-name">${stop.name}</div>
+        <div class="preview-sdg">SDG${stop.sdg} ${getSdgName(stop.sdg)} ｜ ${stop.region}</div>
+      </div>
+      <button class="btn-explore" onclick="openCard(STOPS[${state.currentPos-1}])">查看故事</button>
+    `;
+  }
+  document.getElementById('btn-roll').disabled = state.cardOpen || n >= 7;
+  if (n >= 7) setTimeout(showComplete, 1600);
+}
+
+// ── CARD (修正：任何時候都可開啟) ─────────────────────────────────────────────
+function openCard(stop) {
+  // 如果是透過地圖點選（非骰子流程），先加入visited
+  if (!state.visited.has(stop.id)) {
+    // 不強制加visited，讓玩家只是「預覽」，骰子流程才正式計分
+  }
+
+  state.cardOpen = true;
+  document.getElementById('btn-roll').disabled = true;
+
+  const isVisited = state.visited.has(stop.id);
+  const previewNote = isVisited ? '' :
+    `<div style="background:rgba(45,90,61,0.08);border:1px solid rgba(45,90,61,0.22);border-radius:8px;padding:0.5rem 0.8rem;margin-bottom:0.8rem;font-size:0.82rem;color:var(--forest);">
+      💡 透過擲骰前往此地點，可正式計入探索紀錄
+    </div>`;
+
+  const snapshotRows = stop.snapshot.map(r=>`
+    <div class="snapshot-row">
+      <span class="snapshot-label">${r.label}</span>
+      <span class="snapshot-value">${r.value}</span>
+    </div>`).join('');
+
+  const optBtns = stop.options.map((o,i)=>`
+    <button class="task-option" onclick="checkAnswer(${stop.id},${i},${stop.answer},this)">
+      ${String.fromCharCode(65+i)}. ${o}
+    </button>`).join('');
+
+  document.getElementById('card-container').innerHTML = `
+    <div class="card-gold-bar"></div>
+    <div class="card-header">
+      <div class="card-sdg-tag" style="background:${stop.color}28;color:${stop.color};border:1px solid ${stop.color}55;">
+        SDG ${stop.sdg}｜${getSdgName(stop.sdg)}
+      </div>
+      <div class="card-hero-emoji">${stop.emoji}</div>
+      <div class="card-location-name">${stop.name}</div>
+      <div class="card-region">📍 ${stop.region}，花蓮縣</div>
+    </div>
+    <div class="card-divider"></div>
+    <div class="card-body">
+      ${previewNote}
+      <p class="card-story">${stop.story}</p>
+      <div class="snapshot-mini">
+        <div class="snapshot-mini-title">📊 Social Impact Snapshot（社會影響力速寫）</div>
+        ${snapshotRows}
+        <div style="font-size:0.66rem;color:rgba(26,32,16,0.4);margin-top:0.5rem;">
+          ＊ 企業合作潛力｜${stop.ecoBiz}
+        </div>
+      </div>
+      <div class="task-box">
+        <div class="task-title">🎯 永續思考任務</div>
+        <div class="task-content">${stop.task}</div>
+        <div class="task-options" id="task-opts-${stop.id}">${optBtns}</div>
+        <div class="answer-feedback" id="fb-${stop.id}"></div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <button class="btn-close-card" onclick="closeCard()">返回地圖</button>
+      <button class="btn-continue" onclick="closeCard()">繼續探索 →</button>
+    </div>
+  `;
+  document.getElementById('screen-card').classList.add('active');
+  document.getElementById('card-container').scrollTop = 0;
+}
+
+function checkAnswer(stopId, chosen, correct, btn) {
+  const stop = STOPS.find(s=>s.id===stopId);
+  document.querySelectorAll(`#task-opts-${stopId} .task-option`).forEach((b,i)=>{
+    b.onclick = null;
+    if (i===correct) b.classList.add('correct');
+    else if (i===chosen && chosen!==correct) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('fb-'+stopId);
+  fb.classList.add('show');
+  if (chosen===correct) {
+    fb.classList.add('right');
+    fb.textContent='✅ '+stop.feedback;
+  } else {
+    fb.classList.add('wrong-fb');
+    fb.textContent='💡 '+stop.feedbackWrong;
+  }
+}
+
+function closeCard() {
+  document.getElementById('screen-card').classList.remove('active');
+  state.cardOpen = false;
+  document.getElementById('btn-roll').disabled = state.visited.size >= 7;
+  updateUI();
+}
+
+// ── COMPLETE ─────────────────────────────────────────────────────────────────
+function showComplete() {
+  showScreen('complete');
+  const grid = document.getElementById('complete-sdgs');
+  STOPS.forEach((stop,i)=>{
+    const el = document.createElement('div');
+    el.className = 'complete-sdg';
+    el.style.cssText=`background:${stop.color};animation-delay:${i*0.12}s`;
+    el.innerHTML=`<span style="font-size:1.1rem">${stop.emoji}</span><span>SDG${stop.sdg}</span>`;
+    grid.appendChild(el);
+  });
+}
+
+function restartGame() {
+  state={currentPos:0,visited:new Set(),rolling:false,cardOpen:false};
+  document.getElementById('complete-sdgs').innerHTML='';
+  document.getElementById('dice-display').textContent='🎲';
+  document.getElementById('dice-result').textContent='按下骰子，開始探索花蓮';
+  document.getElementById('position-text').textContent='💡 任何時候都可點選地圖上的圓點查看故事';
+  document.getElementById('stop-preview').innerHTML=`
+    <div class="preview-emoji">🗺️</div>
+    <div class="preview-text">
+      <div class="preview-name">準備出發</div>
+      <div class="preview-sdg">擲骰移動，或直接點地圖圓點查看各地故事</div>
+    </div>`;
+  showScreen('game');
+  renderStops();
+  updateToken(0,true);
+  updateUI();
+}
+
+function getSdgName(n) {
+  return {1:'終結貧窮',2:'消除飢餓',3:'健康與福祉',4:'優質教育',5:'性別平權',6:'淨水及衛生',7:'潔淨能源'}[n]||'';
+}
+
+init();
+</script>
+</body>
+</html>
